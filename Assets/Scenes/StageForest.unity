@@ -3400,7 +3400,7 @@ GameObject:
   - component: {fileID: 721875060}
   - component: {fileID: 721875059}
   - component: {fileID: 721875058}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Robot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
