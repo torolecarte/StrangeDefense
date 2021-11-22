@@ -9,6 +9,7 @@ public class PlayerHealth : MonoBehaviour
     public float FullHealth = 100F;
     public AudioClip PlayerDamagedAudio;
     public Image DamageIndicatorImage;
+    public Text HealthText;
 
 
     // Fields.
@@ -22,6 +23,7 @@ public class PlayerHealth : MonoBehaviour
     {
         _currentHealth = FullHealth;
         _playerAudioSource = GetComponent<AudioSource>();
+        HealthText.text = _currentHealth.ToString();
     }
 
     void Update()
@@ -51,6 +53,7 @@ public class PlayerHealth : MonoBehaviour
             return;
 
         _currentHealth -= damage;
+        UpdateHealthText();
         _playerAudioSource.PlayOneShot(PlayerDamagedAudio);
         _isDamaged = true;
         Debug.Log($"Current health: {_currentHealth}");
@@ -62,6 +65,7 @@ public class PlayerHealth : MonoBehaviour
     {
         Debug.Log("AddHealth: Activated");
         _currentHealth += health;
+        UpdateHealthText();
         Debug.Log($"AddHealth: Current health = {_currentHealth}");
     }
 
@@ -69,5 +73,9 @@ public class PlayerHealth : MonoBehaviour
     private void MakeDead()
     {
         Debug.Log("You are dead!");
+    }
+    private void UpdateHealthText()
+    {
+        HealthText.text = _currentHealth.ToString();
     }
 }
