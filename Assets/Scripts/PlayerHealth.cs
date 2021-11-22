@@ -19,32 +19,18 @@ public class PlayerHealth : MonoBehaviour
     private float _damageIndicatorSpeed = 5;
     private bool _isDamaged;
 
+    // Life Cycle.
     void Start()
     {
         _currentHealth = FullHealth;
         _playerAudioSource = GetComponent<AudioSource>();
         HealthText.text = _currentHealth.ToString();
     }
-
     void Update()
     {
         //HandleDamaged();
     }
 
-    private void HandleDamaged()
-    {
-        if (_isDamaged)
-        {
-            DamageIndicatorImage.color = _damageFlashColour;
-            //DamageIndicatorImage.
-        }
-        else
-        {
-            DamageIndicatorImage.color = Color.Lerp(DamageIndicatorImage.color, Color.clear, _damageIndicatorSpeed * Time.deltaTime);
-        }
-
-        _isDamaged = false;
-    }
 
     // Public Methods.
     public void AddDamage(float damage)
@@ -68,14 +54,30 @@ public class PlayerHealth : MonoBehaviour
         UpdateHealthText();
         Debug.Log($"AddHealth: Current health = {_currentHealth}");
     }
-
-    // Private Methods.
-    private void MakeDead()
+    public void MakeDead()
     {
+        Destroy(gameObject);
         Debug.Log("You are dead!");
     }
+
+    // Private Methods.
     private void UpdateHealthText()
     {
         HealthText.text = _currentHealth.ToString();
     }
+    private void HandleDamaged()
+    {
+        if (_isDamaged)
+        {
+            DamageIndicatorImage.color = _damageFlashColour;
+            //DamageIndicatorImage.
+        }
+        else
+        {
+            DamageIndicatorImage.color = Color.Lerp(DamageIndicatorImage.color, Color.clear, _damageIndicatorSpeed * Time.deltaTime);
+        }
+
+        _isDamaged = false;
+    }
+
 }

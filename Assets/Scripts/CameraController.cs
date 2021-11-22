@@ -12,6 +12,7 @@ public class CameraController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        transform.position = new Vector3(Target.position.x - 2, Target.position.y + 6, transform.position.z);
         _offset = transform.position - Target.position;
     }
 
