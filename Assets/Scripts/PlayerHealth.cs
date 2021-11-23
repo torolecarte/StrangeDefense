@@ -9,7 +9,10 @@ public class PlayerHealth : MonoBehaviour
     public float FullHealth = 100F;
     public AudioClip PlayerDamagedAudio;
     public Image DamageIndicatorImage;
+    public Image LoseScreenBackgroundImage;
     public Text HealthText;
+    public CanvasGroup EndGameCanvasGroup;
+    public Text EndGameText;
 
 
     // Fields.
@@ -57,6 +60,7 @@ public class PlayerHealth : MonoBehaviour
     public void MakeDead()
     {
         Destroy(gameObject);
+        EndGame("You lose!");
         Debug.Log("You are dead!");
     }
 
@@ -78,6 +82,13 @@ public class PlayerHealth : MonoBehaviour
         }
 
         _isDamaged = false;
+    }
+    private void EndGame(string message)
+    {
+        EndGameCanvasGroup.interactable = true;
+        EndGameCanvasGroup.alpha = 1;
+        EndGameText.text = message;
+        LoseScreenBackgroundImage.color = Color.white;
     }
 
 }

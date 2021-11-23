@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameCleanerController : MonoBehaviour
 {
@@ -10,5 +11,15 @@ public class GameCleanerController : MonoBehaviour
         {
             other.gameObject.GetComponent<PlayerHealth>().MakeDead();
         }
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene("StageForest");
+    }
+
+    public void StopGame()
+    {
+        SceneManager.LoadScene("MainScreen");
     }
 }
