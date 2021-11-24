@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     public float MaxSpeed = 5;
     public float JumpPower = 10;
     public LayerMask GroundLayer;
+    public LayerMask DangerGroundLayer;
     public Transform GroundCheck;
 
     // Constants.
@@ -71,7 +72,9 @@ public class PlayerController : MonoBehaviour
         }
 
         _isGrounded = Physics2D.OverlapCircle(GroundCheck.position, _groundCheckRadius, GroundLayer);
-        _animator.SetBool(ANIM_IS_GROUNDED, _isGrounded);
+        bool isInDangerGround = Physics2D.OverlapCircle(GroundCheck.position, _groundCheckRadius, DangerGroundLayer);
+        bool shouldAnimateGrounded = _isGrounded || isInDangerGround;
+        _animator.SetBool(ANIM_IS_GROUNDED, shouldAnimateGrounded);
         _animator.SetFloat(ANIM_VERTICAL_VELOCITY, _rigidBody.velocity.y);
     }
 

@@ -7,22 +7,22 @@ public class EnemyDamage : MonoBehaviour
     // Inspector Properties.
     public float Damage;
     public float DamageRateInSeconds;
-    public float PushBackForce;
+    public float PushBackForce = 35;
 
     // Fields.
-    private float _nextDamage;
+    private float _nextDamageTime;
 
     void Start()
     {
-        _nextDamage = Time.time;
+        _nextDamageTime = Time.time;
     }
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.tag != "Player" || _nextDamage > Time.time)
+        if (other.tag != "Player" || _nextDamageTime > Time.time)
             return;
 
-        _nextDamage = Time.time + DamageRateInSeconds;
+        _nextDamageTime = Time.time + DamageRateInSeconds;
         Debug.Log(Time.time.ToString());
 
         PushBack(other.transform);
@@ -33,7 +33,7 @@ public class EnemyDamage : MonoBehaviour
 
     private void PushBack(Transform pushedObject)
     {
-        Vector2 pushDirection = new Vector2(0, (pushedObject.position.y - transform.position.y));
+        Vector2 pushDirection = new Vector2(0, (pushedObject.position.y - transform.position.y)).normalized;
         pushDirection *= PushBackForce;
 
         Rigidbody2D pushBody = pushedObject.gameObject.GetComponent<Rigidbody2D>();

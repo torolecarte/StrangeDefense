@@ -7,10 +7,11 @@ public class PlayerHealth : MonoBehaviour
 {
     // Inspector Properties.
     public float FullHealth = 100F;
+    public GameObject DeathFx;
     public AudioClip PlayerDamagedAudio;
     public Image DamageIndicatorImage;
-    public Image LoseScreenBackgroundImage;
-    public Text HealthText;
+    public float DamageIndicatorSpeed = 5;
+    public Image HealthSlider;
     public CanvasGroup EndGameCanvasGroup;
     public Text EndGameText;
 
@@ -18,8 +19,7 @@ public class PlayerHealth : MonoBehaviour
     // Fields.
     private float _currentHealth;
     private AudioSource _playerAudioSource;
-    private Color _damageFlashColour;
-    private float _damageIndicatorSpeed = 5;
+    private Color _damageFlashColour = new Color(255f, 255f, 255f, 0.5f);
     private bool _isDamaged;
 
     // Life Cycle.
@@ -27,11 +27,11 @@ public class PlayerHealth : MonoBehaviour
     {
         _currentHealth = FullHealth;
         _playerAudioSource = GetComponent<AudioSource>();
-        HealthText.text = _currentHealth.ToString();
+        UpdateHealthSlider();
     }
     void Update()
     {
-        //HandleDamaged();
+        HandleDamagedFlash();
     }
 
 
@@ -42,7 +42,10 @@ public class PlayerHealth : MonoBehaviour
             return;
 
         _currentHealth -= damage;
-        UpdateHealthText();
+        if(_currentHealth < 0)
+            _currentHealth = 0;
+
+        UpdateHealthSlider();
         _playerAudioSource.PlayOneShot(PlayerDamagedAudio);
         _isDamaged = true;
         Debug.Log($"Current health: {_currentHealth}");
@@ -54,31 +57,35 @@ public class PlayerHealth : MonoBehaviour
     {
         Debug.Log("AddHealth: Activated");
         _currentHealth += health;
-        UpdateHealthText();
+        if(_currentHealth > FullHealth)
+            _currentHealth = FullHealth;
+
+        UpdateHealthSlider();
         Debug.Log($"AddHealth: Current health = {_currentHealth}");
     }
     public void MakeDead()
     {
-        Destroy(gameObject);
+        _playerAudioSource.PlayOneShot(PlayerDamagedAudio);
+        Instantiate(DeathFx, transform.position, Quaternion.identity);
         EndGame("You lose!");
         Debug.Log("You are dead!");
+        Destroy(gameObject);
     }
 
     // Private Methods.
-    private void UpdateHealthText()
+    private void UpdateHealthSlider()
     {
-        HealthText.text = _currentHealth.ToString();
+        HealthSlider.fillAmount = _currentHealth / FullHealth;
     }
-    private void HandleDamaged()
+    private void HandleDamagedFlash()
     {
         if (_isDamaged)
         {
             DamageIndicatorImage.color = _damageFlashColour;
-            //DamageIndicatorImage.
         }
         else
         {
-            DamageIndicatorImage.color = Color.Lerp(DamageIndicatorImage.color, Color.clear, _damageIndicatorSpeed * Time.deltaTime);
+            DamageIndicatorImage.color = Color.Lerp(DamageIndicatorImage.color, Color.clear, DamageIndicatorSpeed * Time.deltaTime);
         }
 
         _isDamaged = false;
@@ -88,7 +95,6 @@ public class PlayerHealth : MonoBehaviour
         EndGameCanvasGroup.interactable = true;
         EndGameCanvasGroup.alpha = 1;
         EndGameText.text = message;
-        LoseScreenBackgroundImage.color = Color.white;
+        DamageIndicatorImage.color = Color.white;
     }
-
 }
