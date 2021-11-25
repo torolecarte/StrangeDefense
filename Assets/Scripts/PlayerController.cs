@@ -46,6 +46,9 @@ public class PlayerController : MonoBehaviour
     public void Move()
     {
         float moveDirection = Input.GetAxis("Horizontal");
+        var isInactive = GetComponent<PlayerHealth>().IsInactive();
+        if(isInactive)
+            return;
 
         //if (_isGrounded)
         //{

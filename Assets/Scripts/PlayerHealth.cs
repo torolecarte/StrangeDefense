@@ -21,6 +21,7 @@ public class PlayerHealth : MonoBehaviour
     private AudioSource _playerAudioSource;
     private Color _damageFlashColour = new Color(255f, 255f, 255f, 0.5f);
     private bool _isDamaged;
+    private float _reactivateOn;
 
     // Life Cycle.
     void Start()
@@ -36,18 +37,20 @@ public class PlayerHealth : MonoBehaviour
 
 
     // Public Methods.
-    public void AddDamage(float damage)
+    public bool IsInactive() => Time.time < _reactivateOn;
+    public void AddDamage(float damage, float inactiveTime = 0)
     {
         if (damage <= 0)
             return;
 
         _currentHealth -= damage;
-        if(_currentHealth < 0)
+        if (_currentHealth < 0)
             _currentHealth = 0;
 
         UpdateHealthSlider();
         _playerAudioSource.PlayOneShot(PlayerDamagedAudio);
         _isDamaged = true;
+        _reactivateOn = Time.time + inactiveTime;
         Debug.Log($"Current health: {_currentHealth}");
 
         if (_currentHealth <= 0)
@@ -57,7 +60,7 @@ public class PlayerHealth : MonoBehaviour
     {
         Debug.Log("AddHealth: Activated");
         _currentHealth += health;
-        if(_currentHealth > FullHealth)
+        if (_currentHealth > FullHealth)
             _currentHealth = FullHealth;
 
         UpdateHealthSlider();
@@ -87,7 +90,6 @@ public class PlayerHealth : MonoBehaviour
         {
             DamageIndicatorImage.color = Color.Lerp(DamageIndicatorImage.color, Color.clear, DamageIndicatorSpeed * Time.deltaTime);
         }
-
         _isDamaged = false;
     }
     private void EndGame(string message)
