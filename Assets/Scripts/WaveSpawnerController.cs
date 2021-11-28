@@ -38,6 +38,14 @@ public class WaveSpawnerController : MonoBehaviour
         if(_winGame)
             return;
 
+        if (Time.time > _timeToNextWave && NumberOfWaves > _currentWave)
+        {
+            _currentWave++;
+            _monsterSpawnedThisWave = 0;
+            _timeToNextWave = Time.time + TimeBetweenWaves;
+            WaveText.text = _currentWave.ToString();
+        }
+
         if (Time.time > _timeToNextSpawn && MonstersPerWave > _monsterSpawnedThisWave)
         {
             _monsterSpawnedThisWave++;
@@ -47,14 +55,6 @@ public class WaveSpawnerController : MonoBehaviour
 
             var gameObject = Instantiate(MonsterToSpawn, spawnLocation.transform.position, Quaternion.identity);
             _listOfMonstersSpawned.Add(gameObject);
-        }
-
-        if (Time.time > _timeToNextWave && NumberOfWaves > _currentWave)
-        {
-            _currentWave++;
-            _monsterSpawnedThisWave = 0;
-            _timeToNextWave = Time.time + TimeBetweenWaves;
-            WaveText.text = _currentWave.ToString();
         }
 
         if (_currentWave == NumberOfWaves && _listOfMonstersSpawned.All(x => x == null))
