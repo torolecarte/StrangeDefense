@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Linq;
 
 public class WaveSpawnerController : MonoBehaviour
 {
@@ -15,12 +17,17 @@ public class WaveSpawnerController : MonoBehaviour
     public GameObject MonsterToSpawn;
     public GameObject MainTarget;
     public TMPro.TextMeshProUGUI WaveText;
+    public CanvasGroup EndGameCanvasGroup;
+    public Text EndGameText;
+    public Image WinIndicatorImage;
 
     // Fields.
     private int _currentWave = 0;
     private float _timeToNextWave = 0f;
     private float _timeToNextSpawn = 0f;
     private float _monsterSpawnedThisWave = 0f;
+    private bool _winGame = false;
+    private List<GameObject> _listOfMonstersSpawned = new List<GameObject>();
 
     void Start()
     {
@@ -28,6 +35,9 @@ public class WaveSpawnerController : MonoBehaviour
     }
     void Update()
     {
+        if(_winGame)
+            return;
+
         if (Time.time > _timeToNextSpawn && MonstersPerWave > _monsterSpawnedThisWave)
         {
             _monsterSpawnedThisWave++;
@@ -35,7 +45,8 @@ public class WaveSpawnerController : MonoBehaviour
             int indexOfSpawnLocation = Random.Range(0, SpawnLocations.Count);
             var spawnLocation = SpawnLocations[indexOfSpawnLocation];
 
-            Instantiate(MonsterToSpawn, spawnLocation.transform.position, Quaternion.identity);
+            var gameObject = Instantiate(MonsterToSpawn, spawnLocation.transform.position, Quaternion.identity);
+            _listOfMonstersSpawned.Add(gameObject);
         }
 
         if (Time.time > _timeToNextWave && NumberOfWaves > _currentWave)
@@ -45,5 +56,20 @@ public class WaveSpawnerController : MonoBehaviour
             _timeToNextWave = Time.time + TimeBetweenWaves;
             WaveText.text = _currentWave.ToString();
         }
+
+        if (_currentWave == NumberOfWaves && _listOfMonstersSpawned.All(x => x == null))
+        {
+            WinGame();
+        }
+    }
+
+    // Private Methods.
+    private void WinGame()
+    {
+        _winGame = true;
+        EndGameCanvasGroup.interactable = true;
+        EndGameCanvasGroup.alpha = 1;
+        EndGameText.text = "Você Venceu!";
+        WinIndicatorImage.color = Color.green;
     }
 }
