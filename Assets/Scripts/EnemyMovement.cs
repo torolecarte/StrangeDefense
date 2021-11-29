@@ -51,7 +51,7 @@ public class EnemyMovement : MonoBehaviour
         //    _nextFlipChance = Time.time + _flipTimeOffset;
         //    FlipFacing();
         //}
-        if(_isDiyng)
+        if (_isDiyng)
             return;
 
         if (!_isCharging)
@@ -86,7 +86,7 @@ public class EnemyMovement : MonoBehaviour
     // Collision Events.
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(_isDiyng)
+        if (_isDiyng)
             return;
 
         if (_reactToTags.Contains(other.tag))
@@ -175,9 +175,11 @@ public class EnemyMovement : MonoBehaviour
     {
         _isWalking = false;
         if (!_isFacingRight)
-            _enemyBody.AddForce(new Vector2(-1f, 0) * ChargeAcceleration);
+            //_enemyBody.AddForce(new Vector2(-1f, 0) * ChargeAcceleration);
+            _enemyBody.velocity = new Vector2(-1f, 0) * ChargeAcceleration;
         else if (_isFacingRight)
-            _enemyBody.AddForce(new Vector2(1f, 0) * ChargeAcceleration);
+            //_enemyBody.AddForce(new Vector2(1f, 0) * ChargeAcceleration);
+            _enemyBody.velocity = new Vector2(1f, 0) * ChargeAcceleration;
     }
     private void SetWalkInTheFacingDirection()
     {

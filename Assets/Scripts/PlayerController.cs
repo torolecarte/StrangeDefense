@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public LayerMask GroundLayer;
     public LayerMask DangerGroundLayer;
     public Transform GroundCheck;
+    public PlayerInput Input;
 
     // Constants.
     private const string ANIM_IS_GROUNDED = "IsGrounded";
@@ -45,7 +47,7 @@ public class PlayerController : MonoBehaviour
     // Movements.
     public void Move()
     {
-        float moveDirection = Input.GetAxis("Horizontal");
+        var moveDirection = Input.actions["Move"].ReadValue<Vector2>();
         var isInactive = GetComponent<PlayerHealth>().IsInactive();
         if(isInactive)
             return;
@@ -57,15 +59,15 @@ public class PlayerController : MonoBehaviour
         //    return;
         //}
 
-        if (moveDirection > 0 && !_facingRight) FlipAnimation();
-        else if (moveDirection < 0 && _facingRight) FlipAnimation();
+        if (moveDirection.x > 0 && !_facingRight) FlipAnimation();
+        else if (moveDirection.x < 0 && _facingRight) FlipAnimation();
 
-        _rigidBody.velocity = new Vector2(moveDirection * MaxSpeed, _rigidBody.velocity.y);
-        _animator.SetFloat(ANIM_MOVE_SPEED, Mathf.Abs(moveDirection));
+        _rigidBody.velocity = new Vector2(moveDirection.x * MaxSpeed, _rigidBody.velocity.y);
+        _animator.SetFloat(ANIM_MOVE_SPEED, Mathf.Abs(moveDirection.x));
     }
     public void Jump()
     {
-        if (_isGrounded && Input.GetAxis("Jump") > 0)
+        if (_isGrounded && Input.actions["Jump"].ReadValue<float>() > 0)
         {
             _animator.SetBool(ANIM_IS_GROUNDED, false);
             _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, 0);

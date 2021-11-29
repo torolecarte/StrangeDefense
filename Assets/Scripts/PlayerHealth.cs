@@ -70,7 +70,7 @@ public class PlayerHealth : MonoBehaviour
     {
         _playerAudioSource.PlayOneShot(PlayerDamagedAudio);
         Instantiate(DeathFx, transform.position, Quaternion.identity);
-        EndGame("You lose!");
+        EndGame("Você perdeu!");
         Debug.Log("You are dead!");
         Destroy(gameObject);
     }

@@ -95,11 +95,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 526e7aef0576faf4a9e0926c5fc791d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackRate: 1
   WalkSpeed: 5
   ChargeInitDelayTime: 0.25
   ChargeEndDelayTime: 0.5
-  ChargeAcceleration: 45
+  ChargeAcceleration: 20
   ChargeSlowdownTime: 10
   MaxChargeSpeed: 40
   ObjectToChase: {fileID: 0}
