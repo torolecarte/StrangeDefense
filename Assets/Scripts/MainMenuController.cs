@@ -13,6 +13,7 @@ public class MainMenuController : MonoBehaviour
     }
     public void OnClick_Credits()
     {
+        SceneManager.LoadSceneAsync("CreditsScreen");
         Debug.Log("Credits clicked!");
     }
     public void OnClick_Exit()
@@ -25,6 +26,11 @@ public class MainMenuController : MonoBehaviour
         // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
+    }
+    public void OnClick_CreditsExit()
+    {
+        Debug.Log("Exiting credits!");
+        SceneManager.LoadSceneAsync("MainScreen");
     }
 
 
